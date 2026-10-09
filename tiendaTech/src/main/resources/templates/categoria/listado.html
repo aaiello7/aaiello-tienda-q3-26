@@ -6,10 +6,13 @@
     <body>
         <header th:replace="~{general/fragmentos :: header}"></header>
 
-        <section th:replace="~{categoria/fragmentos :: formulario}"></section>        
-        <section th:replace="~{categoria/fragmentos :: listado}"></section>        
-
+        <section th:replace="~{categoria/fragmentos :: formulario}"></section>
+        <section th:replace="~{categoria/fragmentos :: listado}"></section>
+        
+        <section th:replace="~{general/fragmentos :: confirmarEliminar(@{/categoria/eliminar},'idCategoria')}"></section>     
+        <section th:replace="~{general/fragmentos :: mostrarToast}"></section>
         <footer th:replace="~{general/fragmentos :: footer}"></footer>
 
+        <script th:src="@{/js/modulos/categoria.js}"></script>
     </body>
 </html>

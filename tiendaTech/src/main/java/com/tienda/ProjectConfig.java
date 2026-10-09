@@ -32,7 +32,7 @@ public class ProjectConfig implements WebMvcConfigurer {
     @Bean
     public SpringResourceTemplateResolver templateResolver_0() {
         SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-        resolver.setPrefix("classpath:/templates");
+        resolver.setPrefix("classpath:/templates/");
         resolver.setSuffix(".html");
         resolver.setTemplateMode(TemplateMode.HTML);
         resolver.setOrder(0);

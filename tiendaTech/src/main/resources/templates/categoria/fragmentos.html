@@ -1,6 +1,64 @@
 <!-- 1 Fragmento con formulario unificado para agregar y modificar categoría -->
 <section th:fragment="formulario">
-    
+    <div class="row py-4 mb-2 bg-light">
+        <div class="col-md-1">            
+        </div>
+        <div class="col-md-3">
+            <button type="button"
+                    class="btn btn-primary"
+                    sec:authorize="hasRole('ROLE_ADMIN')"
+                    data-bs-toggle="modal"
+                    data-bs-target="#categoriaModal"
+                    data-modo="agregar"
+                    th:data-titulo="#{categoria.agregar}">
+                <i class="fa-solid fa-plus"></i>
+                [[#{categoria.agregar}]]
+            </button>
+        </div>
+    </div>
+    <div class="modal fade" id="categoriaModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="categoriaForm" method="post" th:action="@{/categoria/guardar}" enctype="multipart/form-data">
+                    <div class="modal-header" id="categoriaModalHeader">
+                        <h5 class="modal-title"id="categoriaModalTitulo"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="[[#{accion.cerrar}]]"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="categoriaId" name="idCategoria"/>
+                        <input type="hidden" id="categoriaRutaImagen" name="rutaImagen"/>
+                        <div class="mb-3">
+                            <label for="categoriaDescripcion">
+                                [[#{categoria.descripcion}]]
+                            </label>
+                            <input type="text" id="categoriaDescripcion" name="descripcion" class="form-control" maxlength="50" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoriaActivo">
+                                [[#{categoria.activo}]]
+                            </label>
+                            <input type="checkbox" id="categoriaActivo" name="activo" class="form-check-input"/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoriaImagenFile">
+                                [[#{categoria.imagen}]]
+                            </label>
+                            <input type="file" id="categoriaImagenFile" name="imagenFile" class="form-control"/>
+                            <img id="categoriaPreview" class="d-none mt-2" alt="[[#{categoria.imagen}]]" height="200"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-xmark"></i> [[#{accion.cerrar}]]
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa-solid fa-floppy-disk"></i> [[#{accion.guardar}]]
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </section>
 
 <!-- fragmento 2 para el listado de categorias -->
