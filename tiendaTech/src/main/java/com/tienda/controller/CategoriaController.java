@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequiredArgsConstructor
 @RequestMapping("/categoria")
 public class CategoriaController {
+
     private final CategoriaService categoriaService;
     private final MessageSource messageSource;
 
@@ -33,20 +34,23 @@ public class CategoriaController {
     }
 
     @PostMapping("/guardar")
-    public String guardar(@Valid Categoria categoria,BindingResult bindingResult,
+    public String guardar(@Valid Categoria categoria, BindingResult bindingResult,
             @RequestParam(value = "imagenFile", required = false) MultipartFile imagenFile,
             RedirectAttributes redirectAttributes) {
+        String titulo = "todoOk";
+        String mensaje = "mensaje.actualizado";
         if (bindingResult.hasErrors()) {
-            redirectAttributes.addFlashAttribute("error",
-                    messageSource.getMessage("categoria.error04",null,Locale.getDefault()));
-            return "redirect:/categoria/listado";
+            titulo = "error";
+            mensaje = "producto.error04";
+        } else {
+            try {
+                categoriaService.save(categoria, imagenFile);
+            } catch (DataIntegrityViolationException e) {
+                titulo = "error";
+                mensaje = "producto.error05";
+            }
         }
-        try {
-            categoriaService.save(categoria, imagenFile);
-            redirectAttributes.addFlashAttribute("todoOk",messageSource.getMessage("mensaje.actualizado",null,Locale.getDefault()));
-        } catch (DataIntegrityViolationException e) {
-            redirectAttributes.addFlashAttribute("error",messageSource.getMessage("categoria.error05",null,Locale.getDefault()));
-        }
+        redirectAttributes.addFlashAttribute(titulo, messageSource.getMessage(mensaje, null, Locale.getDefault()));
         return "redirect:/categoria/listado";
     }
 
