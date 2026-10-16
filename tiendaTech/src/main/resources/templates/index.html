@@ -4,8 +4,10 @@
     <head th:replace="~{general/fragmentos :: head}"></head>
     <body>
         <header th:replace="~{general/fragmentos :: header}"></header>
-        
-        
+
+        <section th:replace="~{consultas/fragmentos :: tabs}"/>
+        <section th:replace="~{consultas/fragmentos :: tarjetas(true)}"/>
+
         <footer th:replace="~{general/fragmentos :: footer}"></footer>
     </body>
 </html>

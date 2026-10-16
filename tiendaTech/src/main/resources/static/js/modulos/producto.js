@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const header =document.getElementById('productoModalHeader');
     const titulo =document.getElementById('productoModalTitulo');
     const id =document.getElementById('productoId');
-    const categoria =document.getElementById('productoIdCategoria');
+    const categoria =document.getElementById('productoCategoria');
     const descripcion =document.getElementById('productoDescripcion');
     const detalle =document.getElementById('productoDetalle');
     const precio =document.getElementById('productoPrecio');
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function () {
         header.classList.remove('bg-info','bg-warning','text-white');
         if (modo === 'editar') {
             id.value =button.getAttribute('data-id') || '';
-            categoria.value =button.getAttribute('data-categoria-id') || '';
+            categoria.value =button.getAttribute('data-categoria') || '';
             descripcion.value =button.getAttribute('data-descripcion') || '';
             detalle.value =button.getAttribute('data-detalle') || '';
             precio.value =button.getAttribute('data-precio') || '';

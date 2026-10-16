@@ -32,7 +32,7 @@
                         <input type="hidden" id="productoRutaImagen" name="rutaImagen"/>
                         <div class="mb-3">
                             <label for="productoCategoria">[[#{producto.categoria}]]</label>
-                            <select id="productoIdCategoria" name="idCategoria" class="form-select" required>
+                            <select id="productoCategoria" name="categoria.idCategoria" class="form-select" required>
                                 <option th:each="c : ${categorias}" th:value="${c.idCategoria}">
                                     [[${c.descripcion}]]
                                 </option>
@@ -111,7 +111,7 @@
                                              th:src="${p.rutaImagen}"
                                              alt="Imagen de producto"
                                              height="75"/></td>
-                                    <td>[[${p.idCategoria}]]</td>
+                                    <td>[[${p.categoria.descripcion}]]</td>
                                     <td th:text="${p.activo} ? 'Activa':'Inactiva'"></td>
                                     <td sec:authorize="hasRole('ROLE_ADMIN')">
                                         <button type="button" class="btn btn-danger"
@@ -127,7 +127,7 @@
                                                 data-modo="editar"
                                                 th:data-titulo="#{accion.actualizar}"
                                                 th:data-id="${p.idProducto}"
-                                                th:data-categoria-id="${p.idCategoria}"
+                                                th:data-categoria="${p.categoria.idCategoria}"
                                                 th:data-descripcion="${p.descripcion}"
                                                 th:data-detalle="${p.detalle}"
                                                 th:data-precio="${p.precio}"
