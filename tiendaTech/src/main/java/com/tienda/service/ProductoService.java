@@ -1,25 +1,27 @@
 package com.tienda.service;
 
+
 import com.tienda.domain.Producto;
 import com.tienda.repository.ProductoRepository;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class ProductoService {
 
     // El repositorio es final para asegurar la inmutabilidad
     private final ProductoRepository productoRepository;
     private final FirebaseStorageService firebaseStorageService;
+
+    public ProductoService(ProductoRepository productoRepository, FirebaseStorageService firebaseStorageService) {
+        this.productoRepository = productoRepository;
+        this.firebaseStorageService = firebaseStorageService;
+    }
 
     @Transactional(readOnly = true)
     public List<Producto> getProductos(boolean activo) {
@@ -37,7 +39,7 @@ public class ProductoService {
     @Transactional
     public void save(Producto producto, MultipartFile imagenFile) {
         producto = productoRepository.save(producto);
-        if (imagenFile != null && !imagenFile.isEmpty()) { //Si no está vacío... pasaron una imagen...            
+        if (!imagenFile.isEmpty()) { //Si no está vacío... pasaron una imagen...            
             try {
                 String rutaImagen = firebaseStorageService.uploadImage(
                         imagenFile, "producto",
@@ -45,7 +47,7 @@ public class ProductoService {
                 producto.setRutaImagen(rutaImagen);
                 productoRepository.save(producto);
             } catch (IOException e) {
-                log.warn("No fue posible almacenar la imagen de la producto {}", producto.getIdProducto(), e);
+
             }
         }
     }
@@ -59,7 +61,6 @@ public class ProductoService {
         }
         try {
             productoRepository.deleteById(idProducto);
-            productoRepository.flush();
         } catch (DataIntegrityViolationException e) {
             // Lanza una nueva excepción para encapsular el problema de integridad de datos
             throw new IllegalStateException("No se puede eliminar la producto. Tiene datos asociados.", e);
@@ -67,49 +68,18 @@ public class ProductoService {
     }
 
     @Transactional(readOnly = true)
-    public List<Producto> getProductosPorCategoria(Integer idCategoria) {
-        return productoRepository.findByCategoriaIdCategoriaAndActivoTrueOrderByDescripcionAsc(idCategoria);
+    public List<Producto> consultaDerivada(double precioInf, double precioSup) {
+        return productoRepository.findByPrecioBetweenOrderByPrecioAsc(precioInf, precioSup);
     }
+
+    @Transactional(readOnly = true)
+    public List<Producto> consultaJPQL(double precioInf, double precioSup) {
+        return productoRepository.consultaJPQL(precioInf, precioSup);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Producto> consultaSQL(double precioInf, double precioSup) {
+        return productoRepository.consultaJPQL(precioInf, precioSup);
+    }
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
